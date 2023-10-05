@@ -4,6 +4,15 @@
 import { useState, useEffect, useRef } from "react";
 import { Grid, Card, CardMedia, Button } from "@mui/material";
 
+const fetchImages = async (page) => {
+  return await fetch(`https://picsum.photos/v2/list?page=${page}&limit=10`)
+    .then(async (res) => {
+      if (!res.ok) throw new Error("Request Error");
+      return await res.json();
+    })
+    .then((res) => res);
+};
+
 function App() {
   const [images, setImages] = useState([]);
 
@@ -17,14 +26,10 @@ function App() {
   useEffect(() => {
     setLoading(true);
     setError(false);
-    fetch(`https://picsum.photos/v2/list?page=${currentPage}&limit=10`)
-      .then(async (res) => {
-        if (!res.ok) throw new Error("Request Error");
-        return await res.json();
-      })
-      .then((res) => {
+    fetchImages(currentPage)
+      .then((images) => {
         setImages((prevImages) => {
-          const newImages = prevImages.concat(res);
+          const newImages = prevImages.concat(images);
           originalImages.current = newImages;
           return newImages;
         });
