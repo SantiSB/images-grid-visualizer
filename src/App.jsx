@@ -3,6 +3,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useState, useEffect, useRef } from "react";
 import { Grid, Card, CardMedia, Button } from "@mui/material";
+import { useQuery } from "@tanstack/react-query";
 
 const fetchImages = async (page) => {
   return await fetch(`https://picsum.photos/v2/list?page=${page}&limit=10`)
@@ -14,34 +15,12 @@ const fetchImages = async (page) => {
 };
 
 function App() {
-  const [images, setImages] = useState([]);
-
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(false);
+  const {isLoading, isError, data: images} = useQuery(
+    ['images'],
+    async () => await fetchImages(1)
+  )
 
   const [currentPage, setCurrentPage] = useState(1);
-
-  const originalImages = useRef([]);
-
-  useEffect(() => {
-    setLoading(true);
-    setError(false);
-    fetchImages(currentPage)
-      .then((images) => {
-        setImages((prevImages) => {
-          const newImages = prevImages.concat(images);
-          originalImages.current = newImages;
-          return newImages;
-        });
-      })
-      .catch((err) => {
-        setError(err);
-        console.error(err);
-      })
-      .finally(() => {
-        setLoading(false);
-      });
-  }, [currentPage]);
 
   return (
     <div className="main-container">
@@ -70,9 +49,9 @@ function App() {
           </Button>
         </>
       )}
-      {!loading && !error && images?.length == 0 && <p>There are not Images</p>}
-      {!loading && error && <p>Error</p>}
-      {loading && <p>Loading...</p>}
+      {!isLoading && !isError && images?.length == 0 && <p>There are not Images</p>}
+      {!isLoading && isError && <p>Error</p>}
+      {isLoading && <p>Loading...</p>}
     </div>
   );
 }
