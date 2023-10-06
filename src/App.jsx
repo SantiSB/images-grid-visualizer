@@ -1,46 +1,11 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable no-undef */
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useState } from "react";
 import { Grid, Card, CardMedia, Button } from "@mui/material";
-import { useInfiniteQuery } from "@tanstack/react-query";
-
-const fetchImages = async (pageParam = 1) => {
-  return await fetch(`https://picsum.photos/v2/list?page=${pageParam}&limit=10`)
-    .then(async (res) => {
-      if (!res.ok) throw new Error("Request Error");
-      const urlObj = new URL(res.url);
-      const pageValue = urlObj.searchParams.get("page");
-      const data = await res.json();
-      const responseWithPage = { pageValue, data };
-      return responseWithPage;
-    })
-    .then((res) => {
-      const nextCursor = Number(res.pageValue) + 1;
-      return {
-        images: res.data,
-        nextCursor,
-      };
-    });
-};
+import { useImages } from "./hooks/useImages";
 
 function App() {
-  const {
-    isLoading,
-    isError,
-    data,
-    fetchNextPage,
-    hasNextPage
-  } = useInfiniteQuery(
-    ["images"], 
-    fetchImages,
-    {
-      getNextPageParam: (lastPage, pages) => lastPage.nextCursor
-    }
-  );
-
-  const images = data?.pages?.[0].images ?? [];
-  const [currentPage, setCurrentPage] = useState(1);
+  const { isLoading, isError, images, fetchNextPage } = useImages();
 
   return (
     <div className="main-container">
@@ -61,10 +26,7 @@ function App() {
               </Grid>
             ))}
           </Grid>
-          <Button
-            onClick={() => setCurrentPage(currentPage + 1)}
-            variant="contained"
-          >
+          <Button onClick={() => fetchNextPage()} variant="contained">
             Load More Results
           </Button>
         </>
