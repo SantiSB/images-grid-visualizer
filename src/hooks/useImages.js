@@ -7,7 +7,8 @@ export const useImages = () => {
     fetchImages,
     {
       getNextPageParam: (lastPage) => lastPage.nextCursor,
-      refetchOnWindowFocus: false
+      refetchOnWindowFocus: false,
+      staleTime: Infinity
     }
   );
 

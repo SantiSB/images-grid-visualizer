@@ -59,11 +59,24 @@ button:focus-visible {
 
 .main-container {
   height: 80vh;
-  width: 80vw;
+  margin: 1rem;
   overflow-y: scroll;
   padding: 1rem 3rem;
-  border: 2px solid #000000;
   text-align: center;
+}
+
+.main-container::-webkit-scrollbar {
+  width: 8px;
+  border-radius: 4px;
+}
+
+.main-container::-webkit-scrollbar-thumb {
+  background-color: #189f9d;
+  border-radius: 4px;
+}
+
+.main-container::-webkit-scrollbar-button {
+  display: none;
 }
 
 .main-container button {

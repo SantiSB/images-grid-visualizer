@@ -1,14 +1,14 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable no-undef */
 /* eslint-disable react-hooks/exhaustive-deps */
-import { Grid, Card, CardMedia, Button } from "@mui/material";
+import { Grid, Card, CardMedia, Button, Box } from "@mui/material";
 import { useImages } from "./hooks/useImages";
 
 function App() {
   const { isLoading, isError, images, fetchNextPage } = useImages();
 
   return (
-    <div className="main-container">
+    <Box className="main-container">
       {images?.length > 0 && (
         <>
           <Grid container spacing={2}>
@@ -36,7 +36,7 @@ function App() {
       )}
       {!isLoading && isError && <p>Error</p>}
       {isLoading && <p>Loading...</p>}
-    </div>
+    </Box>
   );
 }
 
