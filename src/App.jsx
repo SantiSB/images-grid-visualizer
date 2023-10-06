@@ -5,12 +5,16 @@ import { Grid, Card, CardMedia, Button, Box } from "@mui/material";
 import { useImages } from "./hooks/useImages";
 
 function App() {
-  const { isLoading, isError, images, fetchNextPage } = useImages();
+  const { isLoading, isError, images, fetchNextPage, fetchPreviousPage } =
+    useImages();
 
   return (
     <Box className="main-container">
       {images?.length > 0 && (
         <>
+          <Button onClick={() => fetchPreviousPage()} variant="contained">
+            Load Prev Results
+          </Button>
           <Grid container spacing={2}>
             {images.map((image) => (
               <Grid item key={image.id} xs={12} sm={6} md={4} lg={3}>

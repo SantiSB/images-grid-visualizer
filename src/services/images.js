@@ -9,9 +9,11 @@ export const fetchImages = async ({ pageParam = 1 }) => {
       let url = new URL(res.url);
       let page = Number(url.searchParams.get("page"));
       let nextCursor = page + 1;
+      let prevCursor = page - 1;
       return {
         images: await res.json(),
         nextCursor,
+        prevCursor
       };
     });
 };
